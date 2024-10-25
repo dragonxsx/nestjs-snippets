@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import fsPromise from 'node:fs/promises';
 import http from 'node:http';
 import { setTimeout, setInterval } from 'node:timers/promises';
+import { pipeline } from 'node:stream/promises';
 
 async function anynomousFunction() {
   const abortController = new AbortController();
@@ -11,6 +12,13 @@ async function anynomousFunction() {
   fs.readFile('file.txt', { signal }, (err, data) => {});
   await fsPromise.readFile('file.txt', { signal });
   fs.createReadStream('file.txt', { signal });
+
+  // node:stream/promises
+  await pipeline(
+    fs.createReadStream('file.txt'),
+    fs.createWriteStream('file-copy.txt'),
+    { signal },
+  );
 
   // node:http
   http.get('http://example.com', { signal }, (res) => {});
