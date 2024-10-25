@@ -36,9 +36,12 @@ async function anynomousFunction() {
 
 export async function reallyLongRunningTask(signal?: AbortSignal) {
   console.log('Starting really long running task...');
-
-  for (let i = 1; i <= 1_000; i++) {
-    await setTimeout(1_000, undefined, { signal });
-    console.log(i);
+  try {
+    for (let i = 1; i <= 1_000; i++) {
+      await setTimeout(1_000, undefined, { signal });
+      console.log(i);
+    }
+  } catch {
+    console.log(`${reallyLongRunningTask.name} aborted!`);
   }
 }
